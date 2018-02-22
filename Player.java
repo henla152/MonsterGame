@@ -1,8 +1,9 @@
 public class Player {
 
+    public static final char FACE = '\u263a';
+
     private int x;
     private int y;
-    public static final char FACE = '\u263a';
 
     public Player(int x, int y){
         this.x = x;

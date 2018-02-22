@@ -1,14 +1,15 @@
 import com.googlecode.lanterna.input.Key;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public class Game {
 
-    private char[][] board;
-    private ArrayList<Monster> monsterList = new ArrayList<>();
     private final char WALL = '\u0023';
-    private Render render = new Render();
+
+    private char[][] board;
+    private ArrayList<Monster> monsterList;
+    private Render render;
     private Player player;
 
     public static final int EASY = 2;
@@ -18,7 +19,9 @@ public class Game {
 
     public Game(int length, int height) {
 
+        this.monsterList = new ArrayList<>();
         this.board = new char[length][height];
+        this.render = new Render();
         drawBorders();
     }
 
@@ -39,7 +42,6 @@ public class Game {
     public void updateBoard() throws InterruptedException {
 
         render.drawBoard(board);
-
     }
 
     public void gameStart(int mode) {
@@ -62,7 +64,6 @@ public class Game {
             monsterList.add(new Monster(randX, randY));
             board[randX][randY] = Monster.FACE;
         }
-
     }
 
     public void movePlayer() throws InterruptedException {

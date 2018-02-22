@@ -1,8 +1,9 @@
 public class Monster {
 
+    public static final char FACE = 'X';
+
     private int x;
     private int y;
-    public static final char FACE = 'X';
 
     public Monster(int x, int y){
         this.x = x;
