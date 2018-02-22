@@ -2,24 +2,26 @@ import com.googlecode.lanterna.input.Key;
 
 import java.util.ArrayList;
 
+import static com.googlecode.lanterna.input.Key.Kind.Enter;
+
 
 public class Game {
 
-    private final char WALL = '\u0023';
+    public final static char WALL = '\u0023';
 
     private char[][] board;
     private ArrayList<Monster> monsterList;
+    private ArrayList<Environment> environments;
     private Render render;
     private Player player;
 
-    public static final int EASY = 2;
-    public static final int HARD = 4;
-    public static final int NIGHTMARE = 10;
+    public static final int EASY = 4;
+    public static final int HARD = 8;
+    public static final int NIGHTMARE = 16;
 
 
     public Game(int length, int height) {
 
-        this.monsterList = new ArrayList<>();
         this.board = new char[length][height];
         this.render = new Render();
         drawBorders();
@@ -46,6 +48,9 @@ public class Game {
 
     public void gameStart(int mode) {
 
+        this.monsterList = new ArrayList<>();
+        this.environments = new ArrayList<>();
+
         player = new Player(board.length / 2, board[0].length / 2);
         board[player.getX()][player.getY()] = Player.FACE;
 
@@ -55,6 +60,24 @@ public class Game {
         int minX = 2;
         int maxY = board[0].length - 3;
         int minY = 2;
+
+        for (int i = 0; i < 9; i++) {
+            do {
+                randX = (int) (Math.random() * ((maxX - minX) + 1) + minX);
+                randY = (int) (Math.random() * ((maxY - minY) + 1) + minX);
+            } while (board[randX][randY] != '\u0000');
+
+            environments.add(new Environment(randX, randY));
+            board[randX][randY] = WALL;
+            board[randX + 1][randY + 1] = WALL;
+            environments.add(new Environment(randX + 1, randY + 1));
+            board[randX + 1][randY] = WALL;
+            environments.add(new Environment(randX + 1, randY));
+            board[randX][randY + 1] = WALL;
+            environments.add(new Environment(randX, randY + 1));
+
+        }
+
         for (int i = 0; i < mode; i++) {
             do {
                 randX = (int) (Math.random() * ((maxX - minX) + 1) + minX);
@@ -117,11 +140,11 @@ public class Game {
             if (m.getY() > player.getY()) newY--;
             if (m.getY() < player.getY()) newY++;
 
-            m.setPos(newX, newY);
-            moveCharacter(oldX, oldY, newX, newY);
-
+            if (board[newX][newY] != Monster.FACE && board[newX][newY] != WALL) {
+                m.setPos(newX, newY);
+                moveCharacter(oldX, oldY, newX, newY);
+            }
         }
-        //Check if monster and player is in the same spot
     }
 
     private boolean checkIfEmpty(int x, int y) {
@@ -134,5 +157,47 @@ public class Game {
         char tmpChar = board[oldX][oldY];
         board[oldX][oldY] = '\u0000';
         board[newX][newY] = tmpChar;
+    }
+
+    public boolean isGameOver() {
+
+        for (Monster m :
+                monsterList) {
+            if (player.getX() == m.getX() && player.getY() == m.getY()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void resetGame() {
+
+        board[player.getX()][player.getY()] = '\u0000';
+        for (Monster m :
+                monsterList) {
+            board[m.getX()][m.getY()] = '\u0000';
+        }
+
+        for (Environment e :
+                environments) {
+            board[e.getX()][e.getY()] = '\u0000';
+        }
+    }
+
+    public void gameOver() throws InterruptedException {
+
+        render.gameOver(board.length, board[0].length);
+
+        Key key;
+        do {
+            key = render.terminal.readInput();
+        } while (key == null || key.getKind() != Enter);
+
+        if (key.getKind() == Enter) {
+            render.clearBoard();
+            this.resetGame();
+        } else {
+            System.exit(0);
+        }
     }
 }
