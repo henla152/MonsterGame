@@ -4,12 +4,13 @@ public class Main {
 
         //Init
         Game game = new Game(60, 30);
-        game.gameStart(Game.NIGHTMARE);
+        game.gameStart(Game.EASY);
 
         //Game loop
         while (true) {
             game.updateBoard();
             game.movePlayer();
+            game.moveMonsters();
 
 
         }

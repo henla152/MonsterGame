@@ -15,7 +15,7 @@ public class Render {
     }
     public void drawBoard(char[][] board) throws InterruptedException {
 
-
+        terminal.clearScreen();
         for(int x=0;x<board.length;x++){
             for(int y=0; y<board[0].length;y++){
                 terminal.moveCursor(x,y);

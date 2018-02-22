@@ -1,6 +1,7 @@
 import com.googlecode.lanterna.input.Key;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Game {
 
@@ -99,6 +100,27 @@ public class Game {
                 break;
         }
 
+    }
+
+    public void moveMonsters() {
+
+        for (Monster m :
+                monsterList) {
+            int oldX = m.getX();
+            int oldY = m.getY();
+            int newX = oldX;
+            int newY = oldY;
+
+            if (m.getX() > player.getX()) newX--;
+            if (m.getX() < player.getX()) newX++;
+            if (m.getY() > player.getY()) newY--;
+            if (m.getY() < player.getY()) newY++;
+
+            m.setPos(newX, newY);
+            moveCharacter(oldX, oldY, newX, newY);
+
+        }
+        //Check if monster and player is in the same spot
     }
 
     private boolean checkIfEmpty(int x, int y) {
