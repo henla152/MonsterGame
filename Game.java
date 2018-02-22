@@ -1,3 +1,5 @@
+import com.googlecode.lanterna.input.Key;
+
 import java.util.ArrayList;
 
 public class Game {
@@ -60,5 +62,54 @@ public class Game {
             board[randX][randY] = Monster.FACE;
         }
 
+    }
+
+    public void movePlayer() throws InterruptedException {
+
+        Key key;
+        do {
+            Thread.sleep(5);
+            key = render.terminal.readInput();
+        } while (key == null);
+
+        switch (key.getKind()) {
+            case ArrowDown:
+                if (checkIfEmpty(player.getX(), player.getY() + 1)) {
+                    moveCharacter(player.getX(), player.getY(), player.getX(), player.getY() + 1);
+                    player.setY(player.getY() + 1);
+                }
+                break;
+            case ArrowUp:
+                if (checkIfEmpty(player.getX(), player.getY() - 1)) {
+                    moveCharacter(player.getX(), player.getY(), player.getX(), player.getY() - 1);
+                    player.setY(player.getY() - 1);
+                }
+                break;
+            case ArrowLeft:
+                if (checkIfEmpty(player.getX() - 1, player.getY())) {
+                    moveCharacter(player.getX(), player.getY(), player.getX() - 1, player.getY());
+                    player.setX(player.getX() - 1);
+                }
+                break;
+            case ArrowRight:
+                if (checkIfEmpty(player.getX() + 1, player.getY())) {
+                    moveCharacter(player.getX(), player.getY(), player.getX() + 1, player.getY());
+                    player.setX(player.getX() + 1);
+                }
+                break;
+        }
+
+    }
+
+    private boolean checkIfEmpty(int x, int y) {
+
+        return board[x][y] == '\u0000';
+    }
+
+    public void moveCharacter(int oldX, int oldY, int newX, int newY) {
+
+        char tmpChar = board[oldX][oldY];
+        board[oldX][oldY] = '\u0000';
+        board[newX][newY] = tmpChar;
     }
 }

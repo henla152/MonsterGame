@@ -5,7 +5,7 @@ import java.nio.charset.Charset;
 
 public class Render {
 
-    private Terminal terminal = TerminalFacade.createTerminal(System.in,
+    public Terminal terminal = TerminalFacade.createTerminal(System.in,
             System.out, Charset.forName("UTF8"));
 
 
