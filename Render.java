@@ -20,7 +20,7 @@ public class Render {
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[0].length; y++) {
                 terminal.moveCursor(x, y);
-                terminal.applyBackgroundColor(0,64,0);
+                terminal.applyBackgroundColor(0, 64, 0);
 //                terminal.applyForegroundColor(Terminal.Color.WHITE);
                 char tmp = board[x][y];
                 switch (tmp) {
@@ -35,6 +35,15 @@ public class Render {
                 }
                 terminal.putCharacter(tmp);
             }
+        }
+
+        String monsterCounter = "Monster Count: " + Game.monsterCounter;
+        terminal.applyBackgroundColor(Terminal.Color.BLACK);
+        terminal.applyForegroundColor(Terminal.Color.WHITE);
+
+        for (int i = 0; i < monsterCounter.length(); i++) {
+            terminal.moveCursor(board.length + 2 + i, board[0].length - 1);
+            terminal.putCharacter(monsterCounter.charAt(i));
         }
     }
 
@@ -61,6 +70,7 @@ public class Render {
     }
 
     public void clearBoard() {
+
         terminal.clearScreen();
     }
 }
